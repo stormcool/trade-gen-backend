@@ -1,0 +1,36 @@
+<body ng-app="myApp">
+    <form ng-submit="upload()">
+      <input type="file" ng-model="picture" accept="image/*">
+      <button type="submit">Upload</button>
+    </form>
+  
+    <ul>
+      <li ng-repeat="picture in pictures">
+        <img ng-src="{{picture.url}}">
+        {{picture.name}}
+      </li>
+    </ul>
+  
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+    <script>
+      var app = angular.module('myApp', []);
+  
+      app.controller('myCtrl', function($scope, $http) {
+        $scope.upload = function() {
+          var fd = new FormData();
+          fd.append('picture', $scope.picture);
+  
+          $http.post('/upload', fd, {
+            transformRequest: angular.identity,
+            headers: {'Content-Type': undefined}
+          })
+          .then(function(response) {
+            // Upload successful. Do something with the response.
+          }, function(error) {
+            // Upload failed. Handle the error.
+          });
+        };
+      });
+    </script>
+  </body>
+  
